@@ -146,7 +146,8 @@
 {/snippet}
 
 <div class="flex h-dvh flex-col">
-	<DealerHeader>
+	<!-- offset by the rail so the header lines up with the content column -->
+	<DealerHeader class="md:pl-16 xl:pl-[220px]">
 		<div class="hidden text-right leading-tight sm:block">
 			<p class="text-[11px] text-muted-foreground">{tr('Contract no.')}</p>
 			<p class="font-mono text-xs font-semibold">{w.contractNo}</p>

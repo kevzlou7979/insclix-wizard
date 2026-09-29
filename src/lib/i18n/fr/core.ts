@@ -196,6 +196,8 @@ export const FR_CORE: Record<string, string> = {
 	'Contract summary': 'Résumé du contrat',
 	'Matching addresses': 'Adresses correspondantes',
 	Language: 'Langue',
+	Lookup: 'Recherche',
+	'Address lookup': 'Recherche d’adresse',
 
 	// ---- common wizard chrome (used by many concepts) -------------------------
 	Next: 'Suivant',

@@ -16,6 +16,21 @@ export interface ConceptMeta {
 
 export const CONCEPTS: ConceptMeta[] = [
 	{
+		n: 0,
+		slug: 'default',
+		name: 'Default Insclix wizard',
+		summary:
+			'The current Insclix page wizard, kept as-is in layout and behaviour: numbered step tiles where only the current one shows its label, a segmented progress rail, one wide card with label-left rows and an address Lookup switch, a split Save button and joined Previous / Next — rebuilt on the new design tokens and content.',
+		why: 'The baseline every other concept is measured against. Zero retraining for dealers who already use BCP / Wear Pass today.',
+		bestFor: ['desktop', 'tablet'],
+		designer: 'UI/UX engineer',
+		sources: [
+			{ label: 'NN/g · Wizards', url: 'https://www.nngroup.com/articles/wizards/' },
+			{ label: 'Material steppers', url: 'https://m1.material.io/components/steppers.html' }
+		],
+		load: () => import('./C00Default.svelte')
+	},
+	{
 		n: 1,
 		slug: 'horizontal-stepper',
 		name: 'Sticky horizontal stepper',
@@ -97,22 +112,6 @@ export const CONCEPTS: ConceptMeta[] = [
 	},
 	{
 		n: 6,
-		slug: 'mobile-native',
-		name: 'Mobile native app',
-		summary:
-			'Phone-first: compact "Step 2 of 5" header with a segmented bar, tappable step-map sheet, VIN camera scan, bottom-sheet pickers and a sticky thumb-zone footer.',
-		why: 'Staff walk the lot with a phone. Everything reachable with one thumb, no horizontal stepper overflow.',
-		bestFor: ['mobile'],
-		designer: 'Mobile designer',
-		sources: [
-			{ label: 'Material 3 · bottom sheets', url: 'https://m3.material.io/components/bottom-sheets/guidelines' },
-			{ label: 'Dribbble · bottom sheet app design', url: 'https://dribbble.com/shots/25336374-Bottom-sheet-app-design' },
-			{ label: 'Dribbble · app multi-step form & progress', url: 'https://dribbble.com/shots/8411843-App-multi-step-form-and-progress' }
-		],
-		load: () => import('./C06MobileNative.svelte')
-	},
-	{
-		n: 7,
 		slug: 'task-list',
 		name: 'Task list hub',
 		summary:
@@ -127,39 +126,7 @@ export const CONCEPTS: ConceptMeta[] = [
 		load: () => import('./C07TaskList.svelte')
 	},
 	{
-		n: 8,
-		slug: 'drawer',
-		name: 'Drawer over contracts',
-		summary:
-			'The dealer stays on the contract lookup table. "New contract" slides a wide drawer in from the right with a compact stepper; closing it keeps a draft row in the table.',
-		why: 'Lookup and creation are the two core jobs — the dealer never loses their place in the list.',
-		bestFor: ['desktop'],
-		designer: 'Desktop designer',
-		sources: [
-			{ label: 'SAP Fiori · flexible column layout', url: 'https://www.sap.com/design-system/fiori-design-web/v1-84/page-types/page-layouts/flexible-column-layout/usage' },
-			{ label: 'Dribbble · dashboard wizard', url: 'https://dribbble.com/shots/4347192-Dashboard-Wizard' },
-			{ label: 'PatternFly · primary-detail', url: 'https://www.patternfly.org/patterns/primary-detail/design-guidelines/' }
-		],
-		load: () => import('./C08Drawer.svelte')
-	},
-	{
-		n: 9,
-		slug: 'keyboard-first',
-		name: 'Keyboard-first power mode',
-		summary:
-			'Dense, compact layout for high-volume F&I desks: Ctrl+K command menu, Alt+1…6 to jump steps, Ctrl+Enter for Next, visible shortcut legend and a single tab order.',
-		why: 'Power users enter many contracts a day; NN/g warns wizards get tedious for repeat tasks. Shortcuts remove the friction.',
-		bestFor: ['desktop'],
-		designer: 'Desktop designer',
-		sources: [
-			{ label: 'Linear shortcuts', url: 'https://fastshortcuts.com/shortcuts/linear/' },
-			{ label: 'Cloudscape · content density', url: 'https://cloudscape.design/foundation/visual-foundation/content-density/' },
-			{ label: 'Dribbble · keyboard shortcuts', url: 'https://dribbble.com/tags/keyboard-shortcuts' }
-		],
-		load: () => import('./C09KeyboardFirst.svelte')
-	},
-	{
-		n: 10,
+		n: 7,
 		slug: 'timeline',
 		name: 'Timeline, review as you go',
 		summary:

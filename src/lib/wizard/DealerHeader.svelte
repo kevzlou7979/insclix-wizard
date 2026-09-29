@@ -3,15 +3,27 @@
 	import { cn } from '$lib/utils';
 	import type { Snippet } from 'svelte';
 
-	/** The dealer-app top bar shared by every concept. */
+	/**
+	 * The dealer-app top bar shared by every concept. The border spans the page,
+	 * but the logo and account sit in the same 1168px column as the content +
+	 * summary group, so both edges line up with the content below.
+	 */
 	let {
 		class: className = '',
+		innerClass = '',
 		children,
 		compact = false
-	}: { class?: string; children?: Snippet; compact?: boolean } = $props();
+	}: {
+		class?: string;
+		/** override the inner column (e.g. offset by a side rail) */
+		innerClass?: string;
+		children?: Snippet;
+		compact?: boolean;
+	} = $props();
 </script>
 
-<header class={cn('flex h-14 shrink-0 items-center gap-4 border-b bg-card px-4 sm:px-6', className)}>
+<header class={cn('flex h-14 shrink-0 items-center border-b bg-card', className)}>
+	<div class={cn('mx-auto flex w-full max-w-[1168px] items-center gap-4 px-4 sm:px-6', innerClass)}>
 	<span class="flex items-center gap-2.5">
 		<svg viewBox="0 0 32 32" class="size-7" aria-hidden="true">
 			<rect x="2" y="2" width="12" height="12" rx="3" fill="var(--primary)" />
@@ -33,5 +45,6 @@
 			<p class="text-[11px] text-muted-foreground">{tr('Oakville Toyota')}</p>
 		</div>
 		<span aria-hidden="true" class="grid size-8 shrink-0 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">MA</span>
+	</div>
 	</div>
 </header>

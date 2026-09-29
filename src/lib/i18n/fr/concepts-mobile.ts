@@ -4,7 +4,7 @@ export const FR_MOBILE: Record<string, string> = {
 	'the customer': 'le client',
 	'Which product are you selling?': 'Quel produit vendez-vous?',
 	"What's the customer's name?": 'Quel est le nom du client?',
-	'How can we reach {name}?': 'Comment pouvons-nous joindre {name}?',
+	'How can we reach {name}?': 'Comment joindre {name}?',
 	'Where does {name} live?': 'Où habite {name}?',
 	'Is anyone buying with them?': 'Y a-t-il un coacheteur?',
 	'Which vehicle is it?': 'De quel véhicule s’agit-il?',

@@ -217,7 +217,7 @@
 
 				<section class="space-y-3">
 					<p class="text-xs font-semibold text-muted-foreground">{tr('Preview')}</p>
-					<div class="grid grid-cols-[88px_1fr] items-center gap-x-3 gap-y-2.5 text-sm">
+					<div class="grid grid-cols-[88px_minmax(0,1fr)] items-center gap-x-3 gap-y-2.5 text-sm">
 						<span class="text-muted-foreground">{tr('Product')}</span>
 						<Select.Root type="single" bind:value={product}>
 							<Select.Trigger class="h-10 w-full" aria-label={tr('Product')}>{tr(PRODUCTS.find((p) => p.id === product)?.name)}</Select.Trigger>
@@ -231,7 +231,7 @@
 						<span class="text-muted-foreground">{tr('Viewport')}</span>
 						<Select.Root type="single" bind:value={viewport}>
 							<Select.Trigger class="h-10 w-full" aria-label={tr('Viewport')}>
-								<span class="flex items-center gap-2"><vp.icon class="size-4 text-muted-foreground" />{tr(vp.label)}</span>
+								<span class="flex min-w-0 items-center gap-2"><vp.icon class="size-4 shrink-0 text-muted-foreground" /><span class="truncate">{tr(vp.label)}</span></span>
 							</Select.Trigger>
 							<Select.Content>
 								{#each VIEWPORTS as v (v.value)}

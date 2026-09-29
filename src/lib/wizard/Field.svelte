@@ -40,7 +40,8 @@
 	const describedBy = $derived(err ? `${id}-err` : helpShown ? `${id}-help` : undefined);
 	const required = $derived(field.required ? true : undefined);
 
-	// address lookup
+	// address lookup (the legacy inline layout adds a Lookup on/off switch)
+	let lookup = $state(true);
 	let addrOpen = $state(false);
 	let addrActive = $state(-1);
 	const addrMatches = $derived(
@@ -88,6 +89,7 @@
 		className
 	)}
 	data-field={field.id}
+	data-span={field.span ?? 6}
 >
 	{#if field.type === 'switch'}
 		<div class="flex items-center justify-between gap-4 rounded-lg border bg-card px-3 py-2.5 sm:col-span-2">
@@ -147,7 +149,7 @@
 					{#each field.options ?? [] as o (o.value)}
 						<ToggleGroup.Item
 							value={o.value}
-							class="h-auto min-h-10 flex-1 flex-col pointer-coarse:min-h-11 gap-0 bg-card px-3 py-1.5 text-sm in-data-[density=compact]:min-h-8 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+							class="h-auto min-h-10 flex-1 flex-col pointer-coarse:min-h-11 gap-0 bg-card first:rounded-l-lg last:rounded-r-lg px-3 py-1.5 text-sm in-data-[density=compact]:min-h-8 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
 						>
 							<span class="font-medium">{o.label}</span>
 							{#if o.hint}<span class="text-[11px] opacity-75">{o.hint}</span>{/if}
@@ -203,14 +205,15 @@
 					{/if}
 				</div>
 			{:else if field.type === 'address'}
-				<div class="relative">
-					<MapPin class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+				<div class="flex items-center gap-4">
+				<div class="relative min-w-0 flex-1">
+					{#if lookup}<MapPin class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />{/if}
 					<Input
 						{id}
 						value={value ?? ''}
 						oninput={(e) => {
 							w.set(field.id, e.currentTarget.value);
-							addrOpen = true;
+							addrOpen = lookup;
 							addrActive = -1;
 						}}
 						onkeydown={addrKey}
@@ -224,8 +227,8 @@
 						aria-expanded={addrOpen && addrMatches.length > 0}
 						aria-controls={`${id}-list`}
 						aria-activedescendant={addrOpen && addrActive >= 0 ? `${id}-opt-${addrActive}` : undefined}
-						placeholder={tr('Start typing an address')}
-						class={cn(control, 'pl-9')}
+						placeholder={lookup ? tr('Start typing an address') : ''}
+						class={cn(control, lookup && 'pl-9')}
 					/>
 					{#if addrOpen && addrMatches.length}
 						<ul
@@ -254,6 +257,13 @@
 							{/each}
 						</ul>
 					{/if}
+				</div>
+				{#if layout === 'inline'}
+					<label class="flex shrink-0 cursor-pointer items-center gap-2 text-sm font-medium">
+						<Switch checked={lookup} onCheckedChange={(c) => ((lookup = c), (addrOpen = false))} aria-label={tr('Address lookup')} />
+						{tr('Lookup')}
+					</label>
+				{/if}
 				</div>
 			{:else}
 				<Input

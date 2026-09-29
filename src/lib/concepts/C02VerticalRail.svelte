@@ -84,7 +84,7 @@
 						<span class="flex items-baseline justify-between gap-2">
 							<span
 								class={cn(
-									'truncate text-sm',
+									'min-w-0 text-sm',
 									active ? 'font-semibold text-foreground' : 'font-medium text-foreground/85',
 									st === 'locked' && 'text-muted-foreground'
 								)}>{s.title}</span
@@ -135,7 +135,8 @@
 {/snippet}
 
 <div class="flex h-dvh flex-col">
-	<DealerHeader>
+	<!-- offset by the rail so the header lines up with the content column -->
+	<DealerHeader class="xl:pl-72 2xl:pl-80">
 		<div class="hidden text-right leading-tight sm:block">
 			<p class="text-[11px] text-muted-foreground">{tr('Contract no.')}</p>
 			<p class="font-mono text-xs font-semibold">{w.contractNo}</p>

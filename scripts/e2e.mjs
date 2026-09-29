@@ -3,7 +3,7 @@
 import { chromium } from 'playwright';
 import path from 'node:path';
 
-const SLUGS = ['horizontal-stepper', 'vertical-rail', 'workbench', 'product-first', 'one-question', 'mobile-native', 'task-list', 'drawer', 'keyboard-first', 'timeline'];
+const SLUGS = ['default', 'horizontal-stepper', 'vertical-rail', 'workbench', 'product-first', 'one-question', 'task-list', 'timeline'];
 const PRODUCTS = ['wearpass', 'vsc', 'gap', 'tirewheel'];
 const SIZES = [
 	[1440, 900],

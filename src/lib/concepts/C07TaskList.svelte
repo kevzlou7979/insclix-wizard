@@ -92,6 +92,8 @@
 	const completed = $derived(tasks.filter((t) => t.tag === 'done').length + 1);
 	const allDone = $derived(completed === totalSections);
 	const reviewIndex = $derived(w.steps.findIndex((s) => s.kind === 'review'));
+	/** "Vehicle Service Contract" / « Contrat de service véhicule » already say contract — don't double it */
+	const contractTitle = $derived(/\bcontra(ct|t)\b/i.test(w.product.name) ? w.product.name : tr('{product} contract', { product: w.product.name }));
 	const blockedHint = $derived.by(() => {
 		const first = tasks.find((x) => x.tag !== 'done');
 		return first ? tr('Finish {section} first', { section: first.step.short.toLowerCase() }) : tr('Finish earlier sections first');
@@ -184,7 +186,7 @@
 									<span class="font-mono text-xs sm:hidden">{w.contractNo}</span>
 								</p>
 								<h1 bind:this={heading} tabindex="-1" class="mt-2 text-2xl font-semibold tracking-tight outline-none sm:text-3xl">
-									{tr('{product} contract', { product: w.product.name })}
+									{contractTitle}
 								</h1>
 								<p class="mt-1 text-sm text-muted-foreground">
 									{known.length ? known.join(' · ') : tr('Complete each section. You can stop and come back at any time.')}
@@ -299,7 +301,7 @@
 							<!-- ============ SECTION SUB-PAGE ============ -->
 							<div>{@render backLink()}</div>
 							<section class="mt-2 rounded-2xl border bg-card p-5 shadow-soft sm:p-8 in-data-[density=compact]:p-4 in-data-[density=compact]:sm:p-6">
-								<p class="text-sm text-muted-foreground">{tr('{product} contract', { product: w.product.name })}</p>
+								<p class="text-sm text-muted-foreground">{contractTitle}</p>
 								<h1 bind:this={heading} tabindex="-1" class="mt-1 text-2xl font-semibold tracking-tight outline-none sm:text-3xl">
 									{w.current.title}
 								</h1>
