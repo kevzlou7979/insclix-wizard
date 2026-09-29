@@ -1,0 +1,195 @@
+import type { Component } from 'svelte';
+
+export type Device = 'desktop' | 'tablet' | 'mobile';
+
+export interface ConceptMeta {
+	n: number;
+	slug: string;
+	name: string;
+	summary: string;
+	why: string;
+	bestFor: Device[];
+	designer: 'UI/UX engineer' | 'Desktop designer' | 'Mobile designer';
+	sources: { label: string; url: string }[];
+	load: () => Promise<{ default: Component }>;
+}
+
+export const CONCEPTS: ConceptMeta[] = [
+	{
+		n: 1,
+		slug: 'horizontal-stepper',
+		name: 'Sticky horizontal stepper',
+		summary:
+			'The current wizard, modernised: labelled steps pinned to the top, labels above fields, grouped sections, sticky footer with Close, Save draft, Back and a Next button that names the next step.',
+		why: 'Closest to what dealers already know, so it is the lowest-risk upgrade. Collapses to "Step 2 of 5" on phones.',
+		bestFor: ['desktop', 'tablet'],
+		designer: 'Desktop designer',
+		sources: [
+			{ label: 'Material steppers', url: 'https://m1.material.io/components/steppers.html' },
+			{ label: 'Dribbble · Stepper multi-step form', url: 'https://dribbble.com/shots/6337480-Stepper-Multi-Step-form' },
+			{ label: 'NN/g · Wizards', url: 'https://www.nngroup.com/articles/wizards/' }
+		],
+		load: () => import('./C01HorizontalStepper.svelte')
+	},
+	{
+		n: 2,
+		slug: 'vertical-rail',
+		name: 'Vertical step rail',
+		summary:
+			'A left rail lists every step with its status (done, current, error, locked). The form sits on the right. Steps can grow down the page when a product adds more.',
+		why: 'Wear Pass has 5 steps and a service contract has 6 — a vertical list absorbs that without cramping a top bar.',
+		bestFor: ['desktop', 'tablet'],
+		designer: 'Desktop designer',
+		sources: [
+			{ label: 'Carbon progress indicator', url: 'https://carbondesignsystem.com/components/progress-indicator/usage/' },
+			{ label: 'Dribbble · vertical stepper form', url: 'https://dribbble.com/search/vertical-stepper-form' },
+			{ label: 'Dribbble · long multi-step list on sidebar', url: 'https://dribbble.com/shots/2690749-Long-multi-step-list-on-sidebar' }
+		],
+		load: () => import('./C02VerticalRail.svelte')
+	},
+	{
+		n: 3,
+		slug: 'workbench',
+		name: 'Three-pane workbench',
+		summary:
+			'Step rail | form capped at ~640px | sticky live contract summary with price. Fills wide monitors with what F&I staff actually check while typing.',
+		why: 'Uses the empty width of the legacy layout. The price and VIN stay visible the whole time, like a checkout order summary.',
+		bestFor: ['desktop'],
+		designer: 'Desktop designer',
+		sources: [
+			{ label: 'SAP Fiori · dynamic side content', url: 'https://www.sap.com/design-system/fiori-design-web/v1-108/ui-elements/dynamic-side-content' },
+			{ label: 'Dribbble · order summary', url: 'https://dribbble.com/tags/order_summary' },
+			{ label: 'Dribbble · PolicyPilot auto insurance', url: 'https://dribbble.com/shots/26062430-PolicyPilot-Auto-Insurance-Dashboard-Design' }
+		],
+		load: () => import('./C03Workbench.svelte')
+	},
+	{
+		n: 4,
+		slug: 'product-first',
+		name: 'Product-first launcher',
+		summary:
+			'Starts on a full-page product gallery. Picking a product redraws a tailored flow; a path strip shows exactly which steps that product needs and how long it takes.',
+		why: 'Steps branch by product, so settle the product first and show the dealer the shape of the flow before they commit.',
+		bestFor: ['desktop', 'tablet', 'mobile'],
+		designer: 'UI/UX engineer',
+		sources: [
+			{ label: 'Atlassian · progress tracker (dynamic stages)', url: 'https://atlaskit.atlassian.com/packages/design-system/progress-tracker/example/dynamic-stages' },
+			{ label: 'Dribbble · pricing cards', url: 'https://dribbble.com/tags/pricing-cards' },
+			{ label: 'Salesforce · lightning path', url: 'https://developer.salesforce.com/docs/component-library/bundle/lightning:path' }
+		],
+		load: () => import('./C04ProductFirst.svelte')
+	},
+	{
+		n: 5,
+		slug: 'one-question',
+		name: 'One thing per page',
+		summary:
+			'Conversational flow: one question or one tight group per screen, big type, a back link and Continue, ending on a Check your answers page.',
+		why: 'Calm and hard to get wrong — suits occasional users and customers filling details on a showroom tablet.',
+		bestFor: ['mobile', 'tablet'],
+		designer: 'Mobile designer',
+		sources: [
+			{ label: 'GOV.UK · question pages', url: 'https://design-system.service.gov.uk/patterns/question-pages' },
+			{ label: 'Dribbble · multi-step claim flow animation', url: 'https://dribbble.com/shots/24692461-Multi-Step-Form-Animation-New-Claim-Flow-pt-1' },
+			{ label: 'GOV.UK · check answers', url: 'https://design-system.service.gov.uk/patterns/check-answers' }
+		],
+		load: () => import('./C05OneQuestion.svelte')
+	},
+	{
+		n: 6,
+		slug: 'mobile-native',
+		name: 'Mobile native app',
+		summary:
+			'Phone-first: compact "Step 2 of 5" header with a segmented bar, tappable step-map sheet, VIN camera scan, bottom-sheet pickers and a sticky thumb-zone footer.',
+		why: 'Staff walk the lot with a phone. Everything reachable with one thumb, no horizontal stepper overflow.',
+		bestFor: ['mobile'],
+		designer: 'Mobile designer',
+		sources: [
+			{ label: 'Material 3 · bottom sheets', url: 'https://m3.material.io/components/bottom-sheets/guidelines' },
+			{ label: 'Dribbble · bottom sheet app design', url: 'https://dribbble.com/shots/25336374-Bottom-sheet-app-design' },
+			{ label: 'Dribbble · app multi-step form & progress', url: 'https://dribbble.com/shots/8411843-App-multi-step-form-and-progress' }
+		],
+		load: () => import('./C06MobileNative.svelte')
+	},
+	{
+		n: 7,
+		slug: 'task-list',
+		name: 'Task list hub',
+		summary:
+			'The contract home lists tasks — Customer, Vehicle, Coverage — each with a status tag. Each opens a short sub-flow and returns to the hub. Submit unlocks when all are done.',
+		why: 'Contracts get started, parked (waiting on a VIN or signature) and finished later. The hub makes resuming obvious.',
+		bestFor: ['desktop', 'tablet', 'mobile'],
+		designer: 'Mobile designer',
+		sources: [
+			{ label: 'GOV.UK · complete multiple tasks', url: 'https://design-system.service.gov.uk/patterns/complete-multiple-tasks' },
+			{ label: 'NHS · task list', url: 'https://service-manual.nhs.uk/design-system/components/task-list' }
+		],
+		load: () => import('./C07TaskList.svelte')
+	},
+	{
+		n: 8,
+		slug: 'drawer',
+		name: 'Drawer over contracts',
+		summary:
+			'The dealer stays on the contract lookup table. "New contract" slides a wide drawer in from the right with a compact stepper; closing it keeps a draft row in the table.',
+		why: 'Lookup and creation are the two core jobs — the dealer never loses their place in the list.',
+		bestFor: ['desktop'],
+		designer: 'Desktop designer',
+		sources: [
+			{ label: 'SAP Fiori · flexible column layout', url: 'https://www.sap.com/design-system/fiori-design-web/v1-84/page-types/page-layouts/flexible-column-layout/usage' },
+			{ label: 'Dribbble · dashboard wizard', url: 'https://dribbble.com/shots/4347192-Dashboard-Wizard' },
+			{ label: 'PatternFly · primary-detail', url: 'https://www.patternfly.org/patterns/primary-detail/design-guidelines/' }
+		],
+		load: () => import('./C08Drawer.svelte')
+	},
+	{
+		n: 9,
+		slug: 'keyboard-first',
+		name: 'Keyboard-first power mode',
+		summary:
+			'Dense, compact layout for high-volume F&I desks: Ctrl+K command menu, Alt+1…6 to jump steps, Ctrl+Enter for Next, visible shortcut legend and a single tab order.',
+		why: 'Power users enter many contracts a day; NN/g warns wizards get tedious for repeat tasks. Shortcuts remove the friction.',
+		bestFor: ['desktop'],
+		designer: 'Desktop designer',
+		sources: [
+			{ label: 'Linear shortcuts', url: 'https://fastshortcuts.com/shortcuts/linear/' },
+			{ label: 'Cloudscape · content density', url: 'https://cloudscape.design/foundation/visual-foundation/content-density/' },
+			{ label: 'Dribbble · keyboard shortcuts', url: 'https://dribbble.com/tags/keyboard-shortcuts' }
+		],
+		load: () => import('./C09KeyboardFirst.svelte')
+	},
+	{
+		n: 10,
+		slug: 'timeline',
+		name: 'Timeline, review as you go',
+		summary:
+			'A single scrolling page. Finished steps collapse into summary cards with Change links; the active step stays open below them. The page itself becomes the review.',
+		why: 'No surprise review screen at the end — mistakes surface next to the answer that caused them.',
+		bestFor: ['desktop', 'tablet'],
+		designer: 'UI/UX engineer',
+		sources: [
+			{ label: 'SAP Fiori · wizard floorplan', url: 'https://www.sap.com/design-system/fiori-design-web/v1-38/ui-elements/wizard/usage' },
+			{ label: 'Baymard · accordion checkout', url: 'https://baymard.com/blog/accordion-style-checkout' },
+			{ label: 'Dribbble · wizard stepper', url: 'https://dribbble.com/tags/wizard_stepper' }
+		],
+		load: () => import('./C10Timeline.svelte')
+	}
+];
+
+export const conceptBySlug = (slug: string) => CONCEPTS.find((c) => c.slug === slug) ?? CONCEPTS[0];
+
+/** UX rules every concept follows (from the three research passes). */
+export const RULES: { rule: string; source: string; url: string }[] = [
+	{ rule: 'Name every step with a verb + noun ("Add vehicle") and show where you are.', source: 'NN/g', url: 'https://www.nngroup.com/articles/wizards/' },
+	{ rule: 'Pick the product first; recompute the step list and "Step X of N" when it changes.', source: 'Atlassian', url: 'https://atlaskit.atlassian.com/packages/design-system/progress-tracker/example/dynamic-stages' },
+	{ rule: 'Validate on blur, clear the error the moment the value becomes valid.', source: 'Baymard', url: 'https://baymard.com/blog/inline-form-validation' },
+	{ rule: 'On a failed Next, show an error summary at the top, focus it, link each error to its field.', source: 'GOV.UK', url: 'https://design-system.service.gov.uk/components/error-summary' },
+	{ rule: 'Labels above fields; single column with related fields grouped on one row.', source: 'Baymard', url: 'https://baymard.com/blog/avoid-multi-column-forms' },
+	{ rule: 'Address lookup by default with manual fallback; postal code fills province.', source: 'Baymard', url: 'https://baymard.com/blog/automatic-address-lookup' },
+	{ rule: 'Decode the VIN to fill year / make / model; allow a camera scan on mobile.', source: 'Scanbot', url: 'https://scanbot.io/data-capture-software/vin-scanner/' },
+	{ rule: 'Autosave drafts; Close never throws work away.', source: 'NN/g', url: 'https://www.nngroup.com/articles/wizards/' },
+	{ rule: 'End with a review page grouped by step, with Change links. Final button says "Create contract".', source: 'GOV.UK', url: 'https://design-system.service.gov.uk/patterns/check-answers' },
+	{ rule: 'Only jump forward to steps whose earlier steps are valid; always allow going back.', source: 'PatternFly', url: 'https://www.patternfly.org/components/wizard/design-guidelines/' },
+	{ rule: 'Mobile: 44px+ targets, sticky primary action in the thumb zone, right keyboard per field.', source: 'Baymard', url: 'https://baymard.com/labs/touch-keyboard-types' },
+	{ rule: 'No horizontal stepper on phones — use "Step X of N" + a bar + a step-map sheet.', source: 'Material', url: 'https://m1.material.io/components/steppers.html' }
+];
