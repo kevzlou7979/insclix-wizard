@@ -5,6 +5,7 @@
 	import * as Select from '$lib/components/ui/select';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import { Kbd } from '$lib/components/ui/kbd';
+	import { Switch } from '$lib/components/ui/switch';
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
@@ -22,6 +23,7 @@
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { cn } from '$lib/utils';
 	import { CONCEPTS, RULES } from '$lib/concepts/registry';
+	import ConceptHost from '$lib/concepts/ConceptHost.svelte';
 	import { PRODUCTS } from '$lib/wizard/products';
 	import { tr, setLang } from '$lib/i18n/index.svelte';
 
@@ -56,6 +58,8 @@
 	let density = $state(q.get('density') ?? 'comfortable');
 	let tokens = $state(q.get('tokens') ?? 'clean');
 	let lang = $state(q.get('lang') ?? 'en');
+	/** concept 0 only: side summary on / off (on by default) */
+	let summary = $state(q.get('summary') !== 'off');
 	let frame = $state<HTMLIFrameElement>();
 	let settingsOpen = $state(false);
 
@@ -63,20 +67,31 @@
 	const idx = $derived(CONCEPTS.indexOf(meta));
 	const vp = $derived(VIEWPORTS.find((v) => v.value === viewport) ?? VIEWPORTS[0]);
 	// the iframe only reloads when the concept changes; everything else is posted in
-	const src = $derived(`/concept/${meta.slug}?product=${product}&theme=${theme}&density=${density}&tokens=${tokens}&lang=${lang}`);
+	const src = $derived(`/concept/${meta.slug}?product=${product}&theme=${theme}&density=${density}&tokens=${tokens}&lang=${lang}&summary=${summary ? 'on' : 'off'}`);
 	let frameSrc = $state('');
 	$effect(() => {
 		const slug = meta.slug;
 		frameSrc = untrack(() => src) || slug;
 	});
 
-	const post = (type: string, value?: string) => frame?.contentWindow?.postMessage({ type, value }, location.origin);
+	/** fluid desktop renders the concept inline (no iframe) so page tools like Pinta can pick elements */
+	const inline = $derived(viewport === 'desktop');
+	let host = $state<{ fill: () => void; reset: () => void }>();
+	const post = (type: string, value?: string) => {
+		if (inline) {
+			if (type === 'fill') host?.fill();
+			if (type === 'reset') host?.reset();
+			return;
+		}
+		frame?.contentWindow?.postMessage({ type, value }, location.origin);
+	};
 
 	$effect(() => post('product', product));
 	$effect(() => post('theme', theme));
 	$effect(() => post('density', density));
 	$effect(() => post('tokens', tokens));
 	$effect(() => post('lang', lang));
+	$effect(() => post('summary', summary ? 'on' : 'off'));
 	// the drawer's own copy follows the Language dropdown
 	$effect(() => setLang(lang === 'fr' ? 'fr' : 'en'));
 	$effect(() => {
@@ -95,6 +110,7 @@
 		u.searchParams.set('density', density);
 		u.searchParams.set('tokens', tokens);
 		u.searchParams.set('lang', lang);
+		u.searchParams.set('summary', summary ? 'on' : 'off');
 		try {
 			replaceState(u, {});
 		} catch {
@@ -111,7 +127,6 @@
 			if ((e.target as HTMLElement)?.closest('input,textarea,[role=combobox],[role=listbox]')) return;
 			if (e.key === '[') step(-1);
 			if (e.key === ']') step(1);
-			if (e.key === ',') settingsOpen = !settingsOpen;
 		};
 		window.addEventListener('keydown', onKey);
 		return () => window.removeEventListener('keydown', onKey);
@@ -126,6 +141,11 @@
 
 <div class="relative flex h-dvh flex-col">
 	<!-- Stage -->
+	{#if inline}
+		{#key meta.slug}
+			<ConceptHost bind:this={host} {meta} {product} {density} {summary} />
+		{/key}
+	{:else}
 	<main class="canvas relative min-h-0 flex-1 overflow-auto">
 		<div class={cn('flex h-full justify-center', vp.w ? 'p-4 sm:p-6' : '')}>
 			<div
@@ -147,12 +167,13 @@
 			</div>
 		</div>
 	</main>
+	{/if}
 
 	<!-- Settings FAB: prototype chrome lives in a right-edge drawer so the concept gets the whole page -->
 	<Button
 		onclick={() => (settingsOpen = true)}
 		aria-label={tr('Prototype settings')}
-		title={tr('Prototype settings (,)')}
+		title={tr('Prototype settings')}
 		class="fixed right-5 bottom-24 z-40 size-14 rounded-full p-0 shadow-lift sm:right-6"
 	>
 		<Settings class="size-6" />
@@ -271,6 +292,14 @@
 								{#each DENSITIES as d (d.value)}<Select.Item value={d.value} label={tr(d.label)}>{tr(d.label)}</Select.Item>{/each}
 							</Select.Content>
 						</Select.Root>
+
+						{#if meta.slug === 'default'}
+							<label for="set-summary" class="text-muted-foreground">{tr('Summary')}</label>
+							<div class="flex h-10 items-center gap-3">
+								<Switch id="set-summary" bind:checked={summary} />
+								<span class="text-sm">{summary ? tr('Shown beside the steps') : tr('Hidden')}</span>
+							</div>
+						{/if}
 					</div>
 				</section>
 
@@ -300,7 +329,7 @@
 			</div>
 
 			<p class="border-t px-5 py-3 text-xs text-muted-foreground">
-				{tr('Shortcuts:')} <Kbd>[</Kbd> <Kbd>]</Kbd> {tr('switch concept')} · <Kbd>,</Kbd> {tr('open settings')}
+				{tr('Shortcuts:')} <Kbd>[</Kbd> <Kbd>]</Kbd> {tr('switch concept')}
 			</p>
 		</Sheet.Content>
 	</Sheet.Root>

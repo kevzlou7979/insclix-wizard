@@ -197,6 +197,7 @@ export const FR_CORE: Record<string, string> = {
 	'Matching addresses': 'Adresses correspondantes',
 	Language: 'Langue',
 	Lookup: 'Recherche',
+	Menu: 'Menu',
 	'Address lookup': 'Recherche d’adresse',
 
 	// ---- common wizard chrome (used by many concepts) -------------------------

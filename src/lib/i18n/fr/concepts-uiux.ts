@@ -157,11 +157,13 @@ export const FR_UIUX: Record<string, string> = {
 		'Pas de barre d’étapes horizontale sur téléphone — utilisez « Étape X de N » + une barre + une feuille de carte des étapes.',
 	// ---- C00 Default Insclix wizard ----------------------------------------------
 	'Default Insclix wizard': 'Assistant Insclix par défaut',
-	'The current Insclix page wizard, kept as-is in layout and behaviour: numbered step tiles where only the current one shows its label, a segmented progress rail, one wide card with label-left rows and an address Lookup switch, a split Save button and joined Previous / Next — rebuilt on the new design tokens and content.':
-		'L’assistant Insclix actuel, conservé tel quel pour la mise en page et le comportement : tuiles d’étapes numérotées dont seule l’étape en cours affiche son nom, barre de progression segmentée, une large carte avec libellés à gauche et un interrupteur de recherche d’adresse, un bouton Enregistrer scindé et Précédent / Suivant joints — reconstruit avec les nouveaux jetons de design et le nouveau contenu.',
+	'The current Insclix page wizard, kept as-is in layout and behaviour: every step stacked on one page as numbered cards, labelled step tiles that follow your scroll, a segmented progress rail, label-left rows with an address Lookup switch, a split Save button and joined Previous / Next — rebuilt on the new design tokens and content, with an optional side summary.':
+		'L’assistant Insclix actuel, conservé tel quel pour la mise en page et le comportement : toutes les étapes empilées sur une seule page en cartes numérotées, tuiles d’étapes nommées qui suivent le défilement, barre de progression segmentée, libellés à gauche avec un interrupteur de recherche d’adresse, un bouton Enregistrer scindé et Précédent / Suivant joints — reconstruit avec les nouveaux jetons de design et le nouveau contenu, avec un résumé latéral facultatif.',
 	'The baseline every other concept is measured against. Zero retraining for dealers who already use BCP / Wear Pass today.':
 		'La référence à laquelle chaque autre concept se compare. Aucune nouvelle formation pour les concessionnaires qui utilisent déjà BCP / Wear Pass.',
 	Previous: 'Précédent',
 	'More save options': 'Autres options d’enregistrement',
 	'Discard draft': 'Supprimer le brouillon',
+	'Shown beside the steps': 'Affiché à côté des étapes',
+	Hidden: 'Masqué',
 };

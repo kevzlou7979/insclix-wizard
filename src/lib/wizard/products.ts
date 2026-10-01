@@ -265,7 +265,7 @@ export const PRODUCTS: ProductDef[] = [
 		tagline: 'Mechanical breakdown',
 		description: 'Repairs to covered components after the factory warranty, with roadside and rental.',
 		icon: Wrench,
-		tone: 'success',
+		tone: 'primary',
 		prefix: 'VSC',
 		steps: [
 			productStep,
@@ -332,7 +332,7 @@ export const PRODUCTS: ProductDef[] = [
 		tagline: 'Loan / lease shortfall',
 		description: 'Pays the difference between the insurance payout and the balance owing after a total loss.',
 		icon: Landmark,
-		tone: 'warning',
+		tone: 'primary',
 		prefix: 'GAP',
 		steps: [
 			productStep,
@@ -382,7 +382,7 @@ export const PRODUCTS: ProductDef[] = [
 		tagline: 'Road hazard',
 		description: 'Repairs or replaces tires and rims damaged by potholes, nails and road debris.',
 		icon: CircleDot,
-		tone: 'accent',
+		tone: 'primary',
 		prefix: 'TW',
 		steps: [
 			productStep,

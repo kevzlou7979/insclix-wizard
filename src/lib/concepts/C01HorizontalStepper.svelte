@@ -6,21 +6,20 @@
 	import X from '@lucide/svelte/icons/x';
 	import Save from '@lucide/svelte/icons/save';
 	import Check from '@lucide/svelte/icons/check';
-	import { tick } from 'svelte';
 	import { cn } from '$lib/utils';
 	import type { StepStatus } from '$lib/wizard';
-	import { getWizard, DealerHeader, StepBody, StatusIcon, SuccessPanel, SummaryLayout } from '$lib/wizard';
+	import { getWizard, DealerHeader, StepBody, StatusIcon, SuccessPanel, SummaryLayout, createOnePage } from '$lib/wizard';
 	import { tr } from '$lib/i18n/index.svelte';
 
 	/**
 	 * Concept 1 — Sticky horizontal stepper.
 	 * The legacy page wizard, modernised: labelled steps, top-aligned labels,
-	 * grouped fields, sticky footer. Stepper collapses on its own width
+	 * grouped fields, every step stacked on one page (scroll-spy drives the
+	 * stepper), sticky footer. Stepper collapses on its own width
 	 * (container query), not the viewport.
 	 */
 	const w = getWizard();
 	let main = $state<HTMLElement>();
-	let heading = $state<HTMLElement>();
 	const nextLabel = $derived(w.isLast ? tr('Create contract') : tr('Next: {step}', { step: w.steps[w.index + 1]?.short ?? '' }));
 	const STATUS_TEXT: Record<StepStatus, string> = {
 		complete: 'completed',
@@ -30,24 +29,14 @@
 		locked: 'locked'
 	};
 
-	async function go(fn: () => unknown) {
-		const before = w.index;
-		fn();
-		main?.scrollTo({ top: 0, behavior: 'smooth' });
-		// a11y: announce the new step by moving focus to its heading (error summary keeps focus on errors)
-		if (w.index === before || w.created) return;
-		await tick();
-		if (w.status(w.index) !== 'error') heading?.focus({ preventScroll: true });
-	}
+	// every step is on one page; Next / tiles scroll to a section, scrolling moves the stepper
+	const page = createOnePage(w, () => main);
+	$effect(() => page.spy());
 </script>
 
 <div class="flex h-dvh flex-col">
-	<DealerHeader>
-		<div class="hidden text-right leading-tight sm:block">
-			<p class="text-[11px] text-muted-foreground">{tr('Contract no.')}</p>
-			<p class="font-mono text-xs font-semibold">{w.contractNo}</p>
-		</div>
-	</DealerHeader>
+	<!-- contract no. lives in the summary hero -->
+	<DealerHeader />
 
 	{#if w.created}
 		<main class="flex-1 overflow-y-auto"><SuccessPanel /></main>
@@ -62,7 +51,7 @@
 						<li class="flex min-w-0 flex-1 items-center gap-1 last:flex-none">
 							<button
 								type="button"
-								onclick={() => go(() => w.goto(i))}
+								onclick={() => page.jump(i)}
 								disabled={st === 'locked'}
 								aria-current={i === w.index ? 'step' : undefined}
 								class={cn(
@@ -90,7 +79,7 @@
 						<li class="flex items-center gap-2">
 							<button
 								type="button"
-								onclick={() => go(() => w.goto(i))}
+								onclick={() => page.jump(i)}
 								disabled={st === 'locked'}
 								aria-label={tr('Step {n}: {title}, {status}', { n: i + 1, title: s.title, status: tr(STATUS_TEXT[st]) })}
 								aria-current={i === w.index ? 'step' : undefined}
@@ -110,22 +99,42 @@
 			</div>
 		</nav>
 
-		<!-- Step content -->
+		<!-- Every step on one page -->
 		<main bind:this={main} class="flex-1 overflow-y-auto">
 			<div class="px-4 py-6 sm:px-6 sm:py-8">
 				<SummaryLayout>
-				<section class="rounded-2xl border bg-card p-5 shadow-soft sm:p-8">
-					<header class="mb-6 flex items-start gap-4">
-						<span class="hidden size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary sm:grid dark:text-accent-foreground">
-							<w.current.icon class="size-5" />
-						</span>
-						<div>
-							<h1 bind:this={heading} tabindex="-1" class="text-xl font-semibold tracking-tight outline-none sm:text-2xl">{w.current.title}</h1>
-							<p class="mt-1 text-sm text-muted-foreground">{w.current.description}</p>
-						</div>
-					</header>
-					<StepBody />
-				</section>
+					<div class="flex flex-col gap-4 sm:gap-6">
+						{#each w.steps as s, i (s.id)}
+							{@const active = i === w.index}
+							<section
+								data-section={i}
+								aria-labelledby={`c01-sec-${s.id}`}
+								class={cn(
+									'rounded-2xl border bg-card p-5 shadow-soft transition-[box-shadow,border-color] duration-300 sm:p-8',
+									active && 'border-primary/40 ring-1 ring-primary/20'
+								)}
+							>
+								<header class="mb-6 flex items-start gap-4">
+									<span
+										class={cn(
+											'hidden size-11 shrink-0 place-items-center rounded-xl transition-colors duration-300 sm:grid',
+											active ? 'bg-primary text-primary-foreground' : 'bg-primary-soft text-primary dark:text-accent-foreground'
+										)}
+									>
+										<s.icon class="size-5" />
+									</span>
+									<div>
+										<p class="text-xs font-medium text-muted-foreground">{tr('Step {n}', { n: i + 1 })}</p>
+										<h2 id={`c01-sec-${s.id}`} tabindex="-1" class="text-xl font-semibold tracking-tight outline-none sm:text-2xl">{s.title}</h2>
+										<p class="mt-1 text-sm text-muted-foreground">{s.description}</p>
+									</div>
+								</header>
+								<StepBody step={s} onedit={(id) => page.jump(w.steps.findIndex((x) => x.id === id))} />
+							</section>
+						{/each}
+						<!-- room so the last section can reach the spy line -->
+						<div class="h-[40vh] shrink-0" aria-hidden="true"></div>
+					</div>
 				</SummaryLayout>
 			</div>
 		</main>
@@ -144,10 +153,10 @@
 					<span class="hidden sm:inline">{w.savedAt ? tr('Saved') : tr('Save draft')}</span>
 				</Button>
 				<span class="flex-1"></span>
-				<Button variant="outline" class="h-10 gap-1 pointer-coarse:h-11" disabled={w.isFirst} onclick={() => go(() => w.prev())}>
+				<Button variant="outline" class="h-10 gap-1 pointer-coarse:h-11" disabled={w.isFirst} onclick={page.prev}>
 					<ChevronLeft class="size-4" /> {tr('Back')}
 				</Button>
-				<Button class="h-10 gap-1 px-4 pointer-coarse:h-11" onclick={() => go(() => w.next())}>
+				<Button class="h-10 gap-1 px-4 pointer-coarse:h-11" onclick={page.next}>
 					{nextLabel}
 					{#if !w.isLast}<ChevronRight class="size-4" />{/if}
 				</Button>

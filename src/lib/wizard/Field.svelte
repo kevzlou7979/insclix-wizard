@@ -6,14 +6,12 @@
 	import { Switch } from '$lib/components/ui/switch';
 	import * as Select from '$lib/components/ui/select';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
-	import { Button } from '$lib/components/ui/button';
-	import ScanLine from '@lucide/svelte/icons/scan-line';
 	import MapPin from '@lucide/svelte/icons/map-pin';
 	import CircleCheck from '@lucide/svelte/icons/circle-check';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import { cn } from '$lib/utils';
 	import { getWizard } from './wizard.svelte';
-	import { SAMPLE_ADDRESSES, SAMPLE_VIN } from './products';
+	import { SAMPLE_ADDRESSES } from './products';
 	import type { FieldDef } from './types';
 
 	let {
@@ -90,6 +88,7 @@
 	)}
 	data-field={field.id}
 	data-span={field.span ?? 6}
+	data-type={field.type}
 >
 	{#if field.type === 'switch'}
 		<div class="flex items-center justify-between gap-4 rounded-lg border bg-card px-3 py-2.5 sm:col-span-2">
@@ -106,7 +105,7 @@
 		</div>
 	{:else}
 		<Label
-			for={field.type === 'segmented' ? undefined : id}
+			for={field.type === 'segmented' && layout !== 'inline' ? undefined : id}
 			id={`${id}-label`}
 			class={cn('text-sm font-medium text-foreground/90', layout === 'inline' && 'sm:pt-2.5')}
 		>
@@ -114,7 +113,7 @@
 		</Label>
 
 		<div class="flex min-w-0 flex-col gap-1.5">
-			{#if field.type === 'select'}
+			{#if field.type === 'select' || (field.type === 'segmented' && layout === 'inline')}
 				<Select.Root
 					type="single"
 					value={value ?? ''}
@@ -128,7 +127,7 @@
 					</Select.Trigger>
 					<Select.Content class="max-h-72">
 						{#each field.options ?? [] as o (o.value)}
-							<Select.Item value={o.value} label={o.label}>{o.label}</Select.Item>
+							<Select.Item value={o.value} label={o.label}>{o.label}{#if o.hint}<span class="ml-auto pl-3 text-xs text-muted-foreground">{o.hint}</span>{/if}</Select.Item>
 						{/each}
 					</Select.Content>
 				</Select.Root>
@@ -185,17 +184,6 @@
 						spellcheck={false}
 						class={cn(control, 'font-mono tracking-wider uppercase')}
 					/>
-					<Button
-						type="button"
-						variant="outline"
-						class="h-10 shrink-0 gap-1.5 pointer-coarse:h-11 in-data-[density=compact]:h-8"
-						onclick={() => {
-							w.set('vin', SAMPLE_VIN);
-							w.touch('vin');
-						}}
-					>
-						<ScanLine class="size-4" /> {tr('Scan')}
-					</Button>
 				</div>
 				<div aria-live="polite">
 					{#if w.vinDecoded && !err}

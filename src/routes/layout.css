@@ -13,7 +13,8 @@
 	--app-font: 'Inter';
 	--radius: 0.625rem;
 
-	--background: #ebebeb;
+	/* light bluish canvas so white cards lift off it */
+	--background: #edf2fb;
 	--foreground: #171717;
 	--card: #ffffff;
 	--card-foreground: #171717;
@@ -46,7 +47,7 @@
 	--brand-accent-soft: #fff4eb;
 	--shadow-soft: 0 1px 2px rgb(0 0 0 / 4%), 0 4px 16px rgb(0 0 0 / 5%);
 	--shadow-lift: 0 2px 4px rgb(0 0 0 / 5%), 0 16px 40px rgb(0 0 0 / 10%);
-	--canvas: linear-gradient(#ebebeb, #ebebeb);
+	--canvas: linear-gradient(#edf2fb, #edf2fb);
 
 	--sidebar: #ffffff;
 	--sidebar-foreground: #171717;
@@ -276,6 +277,13 @@
 		@apply bg-background text-foreground font-sans antialiased;
 		background-image: var(--canvas);
 		background-attachment: fixed;
+	}
+	/* every clickable thing shows the hand cursor (Tailwind's preflight resets buttons to default) */
+	:where(button, [role='button'], a[href], summary, label[for], select, [role='tab'], [role='radio'], [role='checkbox'], [role='switch'], [role='option'], [role='menuitem'], [role='menuitemradio'], [role='combobox'], [data-slot='select-trigger']):not(:disabled, [aria-disabled='true'], [data-disabled]) {
+		cursor: pointer;
+	}
+	:where(button, [role='button'], [role='tab'], [role='radio'], [role='switch'], [role='option']):is(:disabled, [aria-disabled='true'], [data-disabled]) {
+		cursor: not-allowed;
 	}
 	/* compact density: tighten vertical rhythm on wizard fields */
 	[data-density='compact'] {

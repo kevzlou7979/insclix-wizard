@@ -12,13 +12,15 @@
 		narrow = false,
 		layout = 'stacked',
 		grouped = true,
-		onedit
+		onedit,
+		reviewVariant = 'cards'
 	}: {
 		step?: StepDef;
 		narrow?: boolean;
 		layout?: 'stacked' | 'inline';
 		grouped?: boolean;
 		onedit?: (stepId: string) => void;
+		reviewVariant?: 'cards' | 'rows';
 	} = $props();
 
 	const w = getWizard();
@@ -33,6 +35,6 @@
 	{:else if s.kind === 'fields'}
 		<StepFields step={s} columns={narrow ? 1 : 6} {layout} {grouped} />
 	{:else}
-		<ReviewList dense={narrow} {onedit} />
+		<ReviewList dense={narrow} variant={reviewVariant} {onedit} />
 	{/if}
 </div>

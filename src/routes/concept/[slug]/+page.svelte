@@ -26,6 +26,7 @@
 	applyTheme(q.get('theme'));
 	applyTokens(q.get('tokens'));
 	setLang((q.get('lang') as Lang) ?? 'en');
+	w.showSummary = q.get('summary') !== 'off';
 	/** re-word any visible validation errors in the new language */
 	function applyLang(l: Lang) {
 		setLang(l);
@@ -41,6 +42,7 @@
 			if (d.type === 'theme') applyTheme(d.value ?? null);
 			if (d.type === 'tokens') applyTokens(d.value ?? null);
 			if (d.type === 'lang' && d.value) applyLang(d.value as Lang);
+			if (d.type === 'summary') w.showSummary = d.value !== 'off';
 			if (d.type === 'density' && d.value) density = d.value;
 			if (d.type === 'fill') w.fillDemo();
 			if (d.type === 'reset') w.reset();

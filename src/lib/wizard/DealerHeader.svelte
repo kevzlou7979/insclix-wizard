@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { tr, locale } from '$lib/i18n/index.svelte';
 	import { cn } from '$lib/utils';
+	import Menu from '@lucide/svelte/icons/menu';
 	import type { Snippet } from 'svelte';
 
 	/**
@@ -12,18 +13,26 @@
 		class: className = '',
 		innerClass = '',
 		children,
-		compact = false
+		compact = false,
+		menu = false
 	}: {
 		class?: string;
 		/** override the inner column (e.g. offset by a side rail) */
 		innerClass?: string;
 		children?: Snippet;
 		compact?: boolean;
+		/** show a hamburger (phones only) before the logo, like the legacy mobile app bar */
+		menu?: boolean;
 	} = $props();
 </script>
 
 <header class={cn('flex h-14 shrink-0 items-center border-b bg-card', className)}>
 	<div class={cn('mx-auto flex w-full max-w-[1168px] items-center gap-4 px-4 sm:px-6', innerClass)}>
+	{#if menu}
+		<button type="button" class="-ml-1 grid size-10 place-items-center rounded-lg text-foreground/80 hover:bg-muted sm:hidden" aria-label={tr('Menu')}>
+			<Menu class="size-5" />
+		</button>
+	{/if}
 	<span class="flex items-center gap-2.5">
 		<svg viewBox="0 0 32 32" class="size-7" aria-hidden="true">
 			<rect x="2" y="2" width="12" height="12" rx="3" fill="var(--primary)" />

@@ -136,12 +136,9 @@
 
 <div class="flex h-dvh flex-col">
 	<!-- offset by the rail so the header lines up with the content column -->
-	<DealerHeader class="xl:pl-72 2xl:pl-80">
-		<div class="hidden text-right leading-tight sm:block">
-			<p class="text-[11px] text-muted-foreground">{tr('Contract no.')}</p>
-			<p class="font-mono text-xs font-semibold">{w.contractNo}</p>
-		</div>
-	</DealerHeader>
+	<!-- contract no. lives in the summary hero -->
+	<!-- logo sits above the rail, flush to the page edge -->
+	<DealerHeader innerClass="max-w-none" />
 
 	{#if w.created}
 		<main class="flex-1 overflow-y-auto"><SuccessPanel /></main>

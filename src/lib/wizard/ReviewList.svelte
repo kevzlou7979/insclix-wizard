@@ -8,11 +8,14 @@
 
 	let {
 		dense = false,
+		variant = 'cards',
 		showPrice = true,
 		onedit,
 		class: className = ''
 	}: {
 		dense?: boolean;
+		/** cards = one card per section; rows = one hairline row per section (name · answers · Change) */
+		variant?: 'cards' | 'rows';
 		showPrice?: boolean;
 		/** override edit behaviour (e.g. scroll to a section); default: w.gotoStepId */
 		onedit?: (stepId: string) => void;
@@ -24,6 +27,24 @@
 	const edit = (id: string) => (onedit ? onedit(id) : w.gotoStepId(id));
 </script>
 
+{#if variant === 'rows'}
+	<div class={cn('border-t', className)}>
+		{#each [{ id: 'product', short: tr('Product'), text: `${w.product.name} · ${w.product.tagline}` }, ...sections.map((s) => ({ id: s.id, short: s.short, text: w.answers(s).map((a) => a.value).join(' · ') }))] as r (r.id)}
+			<div class="grid grid-cols-[minmax(0,7.5rem)_minmax(0,1fr)_auto] items-center gap-4 border-b py-3.5">
+				<span class="text-sm font-semibold">{r.short}</span>
+				<span class={cn('line-clamp-2 text-sm', !r.text && 'text-faint')}>{r.text || tr('Nothing entered yet.')}</span>
+				<Button variant="ghost" size="sm" class="gap-1 text-primary dark:text-accent-foreground" onclick={() => edit(r.id)}>
+					<Pencil class="size-3.5" aria-hidden="true" /> {tr('Change')}<span class="sr-only"> {r.short.toLowerCase()}</span>
+				</Button>
+			</div>
+		{/each}
+		{#if showPrice}
+			<div class="flex justify-between pt-4 font-semibold">
+				<span>{tr('Dealer retail price')}</span><span class="tabular-nums">{money(w.price)}</span>
+			</div>
+		{/if}
+	</div>
+{:else}
 <div class={cn('flex flex-col gap-3', className)}>
 	<section class="rounded-xl border bg-card">
 		<header class="flex items-center justify-between gap-3 border-b px-4 py-2">
@@ -70,3 +91,4 @@
 		</section>
 	{/if}
 </div>
+{/if}

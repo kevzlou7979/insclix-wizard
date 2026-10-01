@@ -163,7 +163,7 @@
 
 <div class="flex min-h-dvh flex-col">
 	<div class="sticky top-0 z-30">
-		<DealerHeader compact>
+		<DealerHeader>
 			{#if w.savedAt && !w.created}
 				<span class="flex items-center gap-1.5 text-xs text-muted-foreground">
 					<Check class="size-3.5 text-success-strong" /> {tr('Draft saved')}

@@ -24,6 +24,8 @@ export class Wizard {
 	vinDecoded = $state(false);
 	/** task-list style concepts let dealers complete sections in any order */
 	freeNav = $state(false);
+	/** prototype setting: concepts that support it show the side summary */
+	showSummary = $state(true);
 
 	/** localized copy — re-derives when the language changes */
 	product = $derived(localizeProduct(productById(this.productId)));

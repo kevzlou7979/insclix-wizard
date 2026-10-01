@@ -20,7 +20,7 @@ export const CONCEPTS: ConceptMeta[] = [
 		slug: 'default',
 		name: 'Default Insclix wizard',
 		summary:
-			'The current Insclix page wizard, kept as-is in layout and behaviour: numbered step tiles where only the current one shows its label, a segmented progress rail, one wide card with label-left rows and an address Lookup switch, a split Save button and joined Previous / Next — rebuilt on the new design tokens and content.',
+			'The current Insclix page wizard, kept as-is in layout and behaviour: every step stacked on one page as numbered cards, labelled step tiles that follow your scroll, a segmented progress rail, label-left rows with an address Lookup switch, a split Save button and joined Previous / Next — rebuilt on the new design tokens and content, with an optional side summary.',
 		why: 'The baseline every other concept is measured against. Zero retraining for dealers who already use BCP / Wear Pass today.',
 		bestFor: ['desktop', 'tablet'],
 		designer: 'UI/UX engineer',
@@ -64,22 +64,6 @@ export const CONCEPTS: ConceptMeta[] = [
 	},
 	{
 		n: 3,
-		slug: 'workbench',
-		name: 'Three-pane workbench',
-		summary:
-			'Step rail | form capped at ~640px | sticky live contract summary with price. Fills wide monitors with what F&I staff actually check while typing.',
-		why: 'Uses the empty width of the legacy layout. The price and VIN stay visible the whole time, like a checkout order summary.',
-		bestFor: ['desktop'],
-		designer: 'Desktop designer',
-		sources: [
-			{ label: 'SAP Fiori · dynamic side content', url: 'https://www.sap.com/design-system/fiori-design-web/v1-108/ui-elements/dynamic-side-content' },
-			{ label: 'Dribbble · order summary', url: 'https://dribbble.com/tags/order_summary' },
-			{ label: 'Dribbble · PolicyPilot auto insurance', url: 'https://dribbble.com/shots/26062430-PolicyPilot-Auto-Insurance-Dashboard-Design' }
-		],
-		load: () => import('./C03Workbench.svelte')
-	},
-	{
-		n: 4,
 		slug: 'product-first',
 		name: 'Product-first launcher',
 		summary:
@@ -95,7 +79,7 @@ export const CONCEPTS: ConceptMeta[] = [
 		load: () => import('./C04ProductFirst.svelte')
 	},
 	{
-		n: 5,
+		n: 4,
 		slug: 'one-question',
 		name: 'One thing per page',
 		summary:
@@ -111,7 +95,7 @@ export const CONCEPTS: ConceptMeta[] = [
 		load: () => import('./C05OneQuestion.svelte')
 	},
 	{
-		n: 6,
+		n: 5,
 		slug: 'task-list',
 		name: 'Task list hub',
 		summary:
@@ -124,22 +108,6 @@ export const CONCEPTS: ConceptMeta[] = [
 			{ label: 'NHS · task list', url: 'https://service-manual.nhs.uk/design-system/components/task-list' }
 		],
 		load: () => import('./C07TaskList.svelte')
-	},
-	{
-		n: 7,
-		slug: 'timeline',
-		name: 'Timeline, review as you go',
-		summary:
-			'A single scrolling page. Finished steps collapse into summary cards with Change links; the active step stays open below them. The page itself becomes the review.',
-		why: 'No surprise review screen at the end — mistakes surface next to the answer that caused them.',
-		bestFor: ['desktop', 'tablet'],
-		designer: 'UI/UX engineer',
-		sources: [
-			{ label: 'SAP Fiori · wizard floorplan', url: 'https://www.sap.com/design-system/fiori-design-web/v1-38/ui-elements/wizard/usage' },
-			{ label: 'Baymard · accordion checkout', url: 'https://baymard.com/blog/accordion-style-checkout' },
-			{ label: 'Dribbble · wizard stepper', url: 'https://dribbble.com/tags/wizard_stepper' }
-		],
-		load: () => import('./C10Timeline.svelte')
 	}
 ];
 

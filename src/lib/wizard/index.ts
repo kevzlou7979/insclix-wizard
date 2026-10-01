@@ -13,3 +13,6 @@ export { default as DealerHeader } from './DealerHeader.svelte';
 export type * from './types';
 export { default as SummaryLayout } from './SummaryLayout.svelte';
 export { default as MobileSummary } from './MobileSummary.svelte';
+export { default as StepChecklist } from './StepChecklist.svelte';
+export { default as DealerTips } from './DealerTips.svelte';
+export { createOnePage } from './onePage.svelte';
